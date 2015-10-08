@@ -16,24 +16,24 @@ def build_url(query):
 
 mode = args.get('mode', None)
 
+print "mode"
+
 if (mode) is None:
-    url = build_url({'mode': 'folder', 'foldername':'Folder One'})
-    li = xbmcgui.ListItem('Folder One', iconImage='DefaultFolder.png')
+    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1srb&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0'
+    li = xbmcgui.ListItem('N1 Live', iconImage='DefaultVideo.png')
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
+
+    url = build_url({'mode': 'folder', 'foldername':'Pressing'})
+    li = xbmcgui.ListItem('Pressing', iconImage='DefaultFolder.png')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
-
-    url = build_url({'mode': 'folder', 'foldername':'Folder Two'})
-    li = xbmcgui.ListItem('Folder Two', iconImage='DefaultFolder.png')
-    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-                                listitem=li, isFolder=True)
-
-
     xbmcplugin.endOfDirectory(addon_handle)
 
+    
 elif mode[0] == 'folder':
     foldername = args['foldername'][0]
     url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1srb&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0'
-    # li = xbmcgui.ListItem('N1 RS!', iconImage='icon.png')
     li = xbmcgui.ListItem(foldername + ' Video', iconImage='DefaultVideo.png')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
     xbmcplugin.endOfDirectory(addon_handle)
+    
