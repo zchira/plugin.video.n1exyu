@@ -14,6 +14,11 @@ xbmcplugin.setContent(addon_handle, 'movies')
 def build_url(query):
     return base_url + '?' + urllib.urlencode(query)
 
+YOUTUBE_PTN = 'plugin://plugin.video.youtube/play/?video_id=%s'
+def youtube_url(videoid):
+    return YOUTUBE_PTN % (videoid)
+
+
 mode = args.get('mode', None)
 
 print "mode"
@@ -32,8 +37,9 @@ if (mode) is None:
     
 elif mode[0] == 'folder':
     foldername = args['foldername'][0]
-    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1srb&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0'
+    url = youtube_url('KSW-L-aZ_OY')
     li = xbmcgui.ListItem(foldername + ' Video', iconImage='DefaultVideo.png')
+    li.setProperty('isplayable','true')
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
     xbmcplugin.endOfDirectory(addon_handle)
     
