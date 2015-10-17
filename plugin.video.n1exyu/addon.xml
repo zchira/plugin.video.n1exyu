@@ -9,7 +9,8 @@
   <extension point="xbmc.addon.metadata">
     <language>en</language>
     <platform>all</platform>
-    <summary lang="en">Watch the live stream from N1 info in Serbian.</summary>
-    <description lang="en">N1 is exYu regional TV.</description>
+    <summary lang="en">Watch the live stream from N1 info in Serbian/Croatian</summary>
+    <description lang="en">N1 is exYu regional news TV</description>
+    <email>zchira@gmail.com</email>
   </extension>
 </addon>
