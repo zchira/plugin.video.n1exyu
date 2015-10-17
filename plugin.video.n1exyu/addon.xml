@@ -1,4 +1,4 @@
-<addon id="plugin.video.n1exyu" name="N1 Info [exYu]" provider-name="zchira" version="0.2">
+<addon id="plugin.video.n1exyu" name="N1 Info" provider-name="zchira" version="0.2">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="plugin.video.youtube" version="4.4.4" />
@@ -10,7 +10,6 @@
     <language>en</language>
     <platform>all</platform>
     <summary lang="en">Watch the live stream from N1 info in Serbian.</summary>
-    <description lang="en">N1 is exYu regional TV.
-    </description>
+    <description lang="en">N1 is exYu regional TV.</description>
   </extension>
 </addon>

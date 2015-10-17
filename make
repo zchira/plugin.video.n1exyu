@@ -1,3 +1,5 @@
+mkdir builds
+
 mv builds/plugin.video.n1exyu.zip builds/plugin.video.n1exyu.zip.old
 
 zip -r plugin.video.n1exyu.zip plugin.video.n1exyu/
