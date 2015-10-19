@@ -1,4 +1,4 @@
-<addon id="plugin.video.n1exyu" name="N1 Info" provider-name="zchira" version="0.2">
+<addon id="plugin.video.n1exyu" name="N1 Info" provider-name="zchira" version="0.3">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="plugin.video.youtube" version="4.4.4" />
