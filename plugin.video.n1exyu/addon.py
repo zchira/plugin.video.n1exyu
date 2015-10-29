@@ -1,15 +1,23 @@
+import os
 import sys
 import urllib
 import urlparse
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
+import resources.helper as helper
+from resources.helper import Article
+from resources.helper import ShowInfo
 
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
 
 xbmcplugin.setContent(addon_handle, 'movies')
+
+"""
+FUNCTIONS
+"""
 
 def build_url(query):
     return base_url + '?' + urllib.urlencode(query)
@@ -18,15 +26,7 @@ YOUTUBE_PTN = 'plugin://plugin.video.youtube/play/?video_id=%s'
 def youtube_url(videoid):
     return YOUTUBE_PTN % (videoid)
 
-
-mode = args.get('mode', None)
-
-#print "mode"
-my_addon = xbmcaddon.Addon("plugin.video.n1exyu")
-iconImage = my_addon.getAddonInfo('icon')
-fanart = my_addon.getAddonInfo('fanart')
-
-if (mode) is None:
+def INDEX():
     url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1srb&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0'
     li = xbmcgui.ListItem('N1 Live [Serbia]', iconImage=iconImage)
     li.setProperty('isplayable', 'true')
@@ -45,19 +45,80 @@ if (mode) is None:
     li.setProperty('fanart_image', fanart)
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 
-    
-#    url = build_url({'mode': 'folder', 'foldername':'Pressing'})
-#    li = xbmcgui.ListItem('Pressing', iconImage='icon.png')
-#    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
-#                                listitem=li, isFolder=True)
-    xbmcplugin.endOfDirectory(addon_handle)
+    add_show_folder(PRESSING_SHOW)
+    add_show_folder(DNEVNIK_19_SHOW)
 
+    xbmcplugin.endOfDirectory(addon_handle)
+    
+
+def FOLDER(folder_name):
+    if folder_name == None:
+        INDEX()
+        return
+
+    items = None
+    show_fanart = fanart
+    
+    if folder_name == PRESSING_SHOW.title:
+        items = helper.get_show_data(PRESSING_SHOW.webPage)
+        show_fanart = PRESSING_SHOW.fanartUrl
+    elif folder_name == DNEVNIK_19_SHOW.title:
+        items = helper.get_show_data(DNEVNIK_19_SHOW.webPage)
+        show_fanart = DNEVNIK_19_SHOW.fanartUrl
+    if items == None:
+        INDEX()
+        return
+        
+    for item in items:
+        add_show_item(item, fanart = show_fanart)
+
+    xbmcplugin.endOfDirectory(addon_handle)
+    
+  
+def add_show_item(item, fanart):
+    url = youtube_url(item.url)
+    li = xbmcgui.ListItem(item.title, iconImage=item.thumb)
+    li.setProperty('isplayable', 'true')
+    li.setProperty('fanart_image', fanart)
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
+
+
+def add_show_folder(show):
+    url = build_url({'mode': 'folder', 'foldername':show.title})
+    li = xbmcgui.ListItem(show.title, iconImage=show.iconUrl)
+    li.setProperty('fanart_image', show.fanartUrl)
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+   
+    
+"""
+MAIN
+"""
+
+mode = args.get('mode', None)
+
+print ">>>>>" + build_url("")
+
+my_addon = xbmcaddon.Addon("plugin.video.n1exyu")
+iconImage = my_addon.getAddonInfo('icon')
+fanart = my_addon.getAddonInfo('fanart')
+
+PRESSING_SHOW = ShowInfo()
+PRESSING_SHOW.webPage = 'http://rs.n1info.com/a4557/TV-Emisije/Pressing/Pressing.html'
+PRESSING_SHOW.title = "Presing"
+PRESSING_SHOW.fanartUrl = "http://static.rs.n1info.com/Picture/2505/jpeg/presing-700.jpg"
+PRESSING_SHOW.iconUrl = iconImage
+
+DNEVNIK_19_SHOW = ShowInfo()
+DNEVNIK_19_SHOW.webPage = 'http://rs.n1info.com/a4549/TV-Emisije/Dnevnik-u-19/Dnevnik-u-19h.html'
+DNEVNIK_19_SHOW.title = "Dnevnik u 19"
+DNEVNIK_19_SHOW.fanartUrl = "http://static.rs.n1info.com/Picture/2494/jpeg/19h.jpg"
+DNEVNIK_19_SHOW.iconUrl = iconImage
+
+
+if (mode) is None:
+    INDEX()
     
 elif mode[0] == 'folder':
-    foldername = args['foldername'][0]
-    url = youtube_url('KSW-L-aZ_OY')
-    li = xbmcgui.ListItem(foldername + ' Video', iconImage='DefaultVideo.png')
-    li.setProperty('isplayable','true')
-    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
-    xbmcplugin.endOfDirectory(addon_handle)
-    
+    foldername = args.get('foldername', None)
+    print foldername[0]
+    FOLDER(foldername[0])
