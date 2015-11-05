@@ -1,18 +1,61 @@
 from bs4 import BeautifulSoup
 import urllib2
 from urlparse import urlparse
+from ytHelper import vids_by_playlist
+
+NEXT_PAGE = "Next Page"
+PREV_PAGE = "Previous Page"
 
 class Article(object):
     title = ""
     thumb = ""
-    url = ""
+    yt_id = ""
+    description = ""
 
+    
 class ShowInfo(object):
     webPage = ''
     title = ''
     fanartUrl = ''
     iconUrl = ''
-   
+    yt_playlist_id = '';
+
+def get_show_data_yt(yt_playlist_id, nextpage = False):
+    yt_response = vids_by_playlist(yt_playlist_id, nextpage)
+    toRet = []
+      
+    try:
+        prevPageToken = yt_response["prevPageToken"]
+        prevPage = Article()
+        prevPage.title = PREV_PAGE
+        prevPage.yt_id = prevPageToken
+        toRet.append(prevPage)
+    except:
+        pass
+        
+    for i in yt_response["items"]:
+        item = Article()
+        try:
+            item.title = i["snippet"]["title"]            
+            item.yt_id = i["snippet"]["resourceId"]["videoId"]
+            item.thumb = i["snippet"]["thumbnails"]["high"]["url"]
+            item.description = i["snippet"]["description"]
+            toRet.append(item)
+        except:
+            pass
+
+    try:
+        nextPageToken = yt_response["nextPageToken"]
+        nextPage = Article()
+        nextPage.title = NEXT_PAGE
+        nextPage.yt_id = nextPageToken
+        toRet.append(nextPage)
+    except:
+        pass
+    
+
+        
+    return toRet
 
 def get_show_data(show_web_page):
     
@@ -39,9 +82,8 @@ def get_show_data(show_web_page):
         if a == None:
             continue
         url = url.get('href')
-        item.url = find_youtube_id(url)
+        item.yt_id = find_youtube_id(url)
 
-        print ">>>>>>>>>  " + item.thumb
         toRet.append(item)
         
     return toRet
@@ -77,6 +119,3 @@ def video_id(yt_url):
     # fail?
     return None
 
-def testPrint():
-    print "----SUC"
-    return;

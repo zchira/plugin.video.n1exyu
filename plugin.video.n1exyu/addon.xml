@@ -1,8 +1,11 @@
-<addon id="plugin.video.n1exyu" name="N1 Info" provider-name="zchira" version="0.4">
+<addon id="plugin.video.n1exyu" name="N1 Info" provider-name="zchira" version="0.5">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="script.module.beautifulsoup4" version="4.3.1"/>
     <import addon="plugin.video.youtube" version="4.4.4" />
+    <import addon="script.module.googleapi" version="1.4.0" />
+
+    <import addon="script.module.oauth2client" version="1.4.7" />
   </requires>
   <extension library="addon.py" point="xbmc.python.pluginsource">
     <provides>video</provides>
