@@ -1,6 +1,7 @@
 import os
 import sys
 import urllib
+import urllib2
 import urlparse
 import xbmcgui
 import xbmcplugin
@@ -33,20 +34,24 @@ YOUTUBE_PTN = 'plugin://plugin.video.youtube/play/?video_id=%s'
 def youtube_url(videoid):
     return YOUTUBE_PTN % (videoid)
 
-def INDEX():
-    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1srb&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0'
+def INDEX():    
+    HEADERS = urllib.urlencode({'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'})
+    
+    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1srb&stream=1mb&b=6&player=mpg&u=n1info&p=n1Sh4redSecre7iNf0|%s' % HEADERS
+
+    
     li = xbmcgui.ListItem('N1 Live [Serbia]', iconImage=iconImage)
     li.setProperty('isplayable', 'true')
     li.setProperty('fanart_image', fanart)
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 
-    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1hr&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0'
+    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1hr&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0|%s' % HEADERS
     li = xbmcgui.ListItem('N1 Live [Croatia]', iconImage=iconImage)
     li.setProperty('isplayable', 'true')
     li.setProperty('fanart_image', fanart)
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 
-    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1bih&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0'
+    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1bih&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0|%s' % HEADERS
     li = xbmcgui.ListItem('N1 Live [BiH]', iconImage=iconImage)
     li.setProperty('isplayable', 'true')
     li.setProperty('fanart_image', fanart)
