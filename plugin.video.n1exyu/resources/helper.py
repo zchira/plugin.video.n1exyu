@@ -4,35 +4,39 @@ from urlparse import urlparse
 from ytHelper import vids_by_playlist
 
 NEXT_PAGE = "Next Page"
-PREV_PAGE = "Previous Page"
 
 class Article(object):
+    """ Class that represent one article/episode/listItem """    
+    """  Title of article """ 
     title = ""
+    """ Url/path to thumbnail """
     thumb = ""
+    """ youtube video id """
     yt_id = ""
+    """ youtube video description """
     description = ""
 
     
 class ShowInfo(object):
+    """ Class that represents one tv show """
+
+    """ Web page that needs to be scraped for episodes content. 
+    Not used anymore (youtube api is used instead """
     webPage = ''
+    """ tv show title """
     title = ''
+    """ fanart image url. Used for background """    
     fanartUrl = ''
+    """ ison url """
     iconUrl = ''
+    """ youtube playlist id """
     yt_playlist_id = '';
 
 def get_show_data_yt(yt_playlist_id, nextpage = False):
+    """ Get data from youtube playlist. Returns the list of the Article objects """
     yt_response = vids_by_playlist(yt_playlist_id, nextpage)
     toRet = []
-      
-    try:
-        prevPageToken = yt_response["prevPageToken"]
-        prevPage = Article()
-        prevPage.title = PREV_PAGE
-        prevPage.yt_id = prevPageToken
-        toRet.append(prevPage)
-    except:
-        pass
-        
+    
     for i in yt_response["items"]:
         item = Article()
         try:
@@ -53,12 +57,10 @@ def get_show_data_yt(yt_playlist_id, nextpage = False):
     except:
         pass
     
-
-        
     return toRet
 
 def get_show_data(show_web_page):
-    
+    """ Scrap data from web_page. Returns the list of the Article objets """
     webpage = urllib2.urlopen(show_web_page)
     soup = BeautifulSoup(webpage, "html.parser")
     media_div = soup.find('div', class_="medium-media")
@@ -90,6 +92,7 @@ def get_show_data(show_web_page):
     
 
 def find_youtube_id(url):
+    """ Find and return youtube url on the web page """
     webpage = urllib2.urlopen(url)
     soup = BeautifulSoup(webpage, "html.parser")
     iframe = soup.find_all('iframe', class_="video-player")
@@ -104,6 +107,7 @@ def video_id(yt_url):
     - http://www.youtube.com/watch?v=_oPAwA_Udwc&feature=feedu
     - http://www.youtube.com/embed/SA2iWivDJiE
     - http://www.youtube.com/v/SA2iWivDJiE?version=3&amp;hl=en_US
+    Return youtube video id or None
     """
     query = urlparse(yt_url)
     if query.hostname == 'youtu.be':

@@ -87,7 +87,7 @@ def FOLDER(folder_name, pagetoken = ''):
         return
         
     for item in items:
-        if item.title == helper.NEXT_PAGE or item.title == helper.PREV_PAGE:
+        if item.title == helper.NEXT_PAGE:
             add_next_prev_folder(folder_name, item.title, item.yt_id, iconUrl, show_fanart)
         else:
             add_show_item(item, fanart = show_fanart)
