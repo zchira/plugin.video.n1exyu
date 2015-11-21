@@ -23,6 +23,10 @@ my_addon = xbmcaddon.Addon("plugin.video.n1exyu")
 iconImage = my_addon.getAddonInfo('icon')
 fanart = my_addon.getAddonInfo('fanart')
 
+LIVE_SERBIAN_URL = "http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1srb&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0"
+LIVE_CROATIAN_URL = "http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1hr&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0"
+LIVE_BOSNIAN_URL = "http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1bih&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0"
+
 """
 FUNCTIONS
 """
@@ -34,33 +38,26 @@ YOUTUBE_PTN = 'plugin://plugin.video.youtube/play/?video_id=%s'
 def youtube_url(videoid):
     return YOUTUBE_PTN % (videoid)
 
-def INDEX():    
-    HEADERS = urllib.urlencode({'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'})
+def INDEX():
+    add_live_stream(LIVE_SERBIAN_URL, u'N1 Live [Srbija]', 'Program za region Srbije')
+    add_live_stream(LIVE_CROATIAN_URL, 'N1 Live [Hrvatska]', 'Program za region Hrvatske')
+    add_live_stream(LIVE_BOSNIAN_URL, 'N1 Live [BiH]', 'Program za region BiH')
     
-    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1srb&stream=1mb&b=6&player=mpg&u=n1info&p=n1Sh4redSecre7iNf0|%s' % HEADERS
-
-    
-    li = xbmcgui.ListItem('N1 Live [Serbia]', iconImage=iconImage)
-    li.setProperty('isplayable', 'true')
-    li.setProperty('fanart_image', fanart)
-    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
-
-    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1hr&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0|%s' % HEADERS
-    li = xbmcgui.ListItem('N1 Live [Croatia]', iconImage=iconImage)
-    li.setProperty('isplayable', 'true')
-    li.setProperty('fanart_image', fanart)
-    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
-
-    url = 'http://best.str.n1info.com:8080/stream?sp=n1info&channel=n1bih&stream=1mb&b=6&player=m3u8&u=n1info&p=n1Sh4redSecre7iNf0|%s' % HEADERS
-    li = xbmcgui.ListItem('N1 Live [BiH]', iconImage=iconImage)
-    li.setProperty('isplayable', 'true')
-    li.setProperty('fanart_image', fanart)
-    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
-
     add_show_folder(PRESSING_SHOW)
     add_show_folder(DNEVNIK_19_SHOW)
+    add_show_folder(CRVENA_LINIJA_SHOW)
 
     xbmcplugin.endOfDirectory(addon_handle)
+
+def add_live_stream(url, title, plot): 
+    HEADERS = urllib.urlencode({'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'})
+    url = url + '|%s' % HEADERS
+    li = xbmcgui.ListItem(title, iconImage=iconImage)
+    li.setProperty('isplayable', 'true')
+    li.setProperty('fanart_image', fanart)
+    infoLabels = { 'plot' : plot}
+    li.setInfo( type="video", infoLabels=infoLabels)
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
     
 
 def FOLDER(folder_name, pagetoken = ''):
@@ -71,23 +68,28 @@ def FOLDER(folder_name, pagetoken = ''):
     items = None
     show_fanart = fanart
     iconUrl = iconImage
-    
+
+    show = None
+
     if folder_name == PRESSING_SHOW.title:
-        #items = helper.get_show_data(PRESSING_SHOW.webPage)
-        items = helper.get_show_data_yt(PRESSING_SHOW.yt_playlist_id, pagetoken)
-        iconUrl = PRESSING_SHOW.iconUrl
-        show_fanart = PRESSING_SHOW.fanartUrl
+        show = PRESSING_SHOW
     elif folder_name == DNEVNIK_19_SHOW.title:
-        #items = helper.get_show_data_yt(DNEVNIK_19_SHOW.webPage)
-        items = helper.get_show_data_yt(DNEVNIK_19_SHOW.yt_playlist_id, pagetoken)
-        iconUrl = DNEVNIK_19_SHOW.iconUrl
-        show_fanart = DNEVNIK_19_SHOW.fanartUrl
+        show = DNEVNIK_19_SHOW
+    elif folder_name == CRVENA_LINIJA_SHOW.title:
+        show = CRVENA_LINIJA_SHOW
+
+    if show != None:
+        #items = = helper.get_show_data(show.webPage)
+        items = helper.get_show_data_yt(show.yt_playlist_id, pagetoken)
+        iconUrl = show.iconUrl
+        show_fanart = show.fanartUrl
+    
     if items == None:
         INDEX()
         return
         
     for item in items:
-        if item.title == helper.NEXT_PAGE or item.title == helper.PREV_PAGE:
+        if item.title == helper.NEXT_PAGE:
             add_next_prev_folder(folder_name, item.title, item.yt_id, iconUrl, show_fanart)
         else:
             add_show_item(item, fanart = show_fanart)
@@ -100,6 +102,8 @@ def add_show_item(item, fanart):
     li = xbmcgui.ListItem(item.title, iconImage=item.thumb)
     li.setProperty('isplayable', 'true')
     li.setProperty('fanart_image', fanart)
+    #infoLabels = {'plot' : item.description}  
+    #li.setInfo( type="video", infoLabels=infoLabels) <-- causes exception    
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=False)
 
 def add_show_folder(show, pagetoken = ''):
@@ -133,6 +137,15 @@ DNEVNIK_19_SHOW.title = "Dnevnik u 19 [Srbija]"
 DNEVNIK_19_SHOW.fanartUrl = "http://static.rs.n1info.com/Picture/2494/jpeg/19h.jpg"
 DNEVNIK_19_SHOW.iconUrl = iconImage
 DNEVNIK_19_SHOW.yt_playlist_id = "PLtkTKfgc4b4VA7ytBRgVS1tHpQ7cC_VoT"
+
+CRVENA_LINIJA_SHOW = ShowInfo()
+CRVENA_LINIJA_SHOW.webPage = 'http://rs.n1info.com/a104633/TV-Emisije/Crvena-linija/Crvena-linija.html'
+CRVENA_LINIJA_SHOW.title = "Crvena Linija"
+CRVENA_LINIJA_SHOW.fanartUrl = 'http://static.rs.n1info.com/Picture/46806/jpeg/Crvena-Linija-mali-poster-tv-emisija.jpg'
+CRVENA_LINIJA_SHOW.iconUrl = iconImage
+CRVENA_LINIJA_SHOW.yt_playlist_id = "PLtkTKfgc4b4WnU64YTYTsbCrTnyYhrJcD"
+
+
 
 if (mode) is None:
     INDEX()
