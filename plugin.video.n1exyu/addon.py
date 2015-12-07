@@ -102,8 +102,8 @@ def add_show_item(item, fanart):
     li = xbmcgui.ListItem(item.title, iconImage=item.thumb)
     li.setProperty('isplayable', 'true')
     li.setProperty('fanart_image', fanart)
-    #infoLabels = {'plot' : item.description}  
-    #li.setInfo( type="video", infoLabels=infoLabels) <-- causes exception    
+    infoLabels = {'plot' : item.description}  
+    li.setInfo( type="video", infoLabels=infoLabels) <-- causes exception    
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=False)
 
 def add_show_folder(show, pagetoken = ''):
