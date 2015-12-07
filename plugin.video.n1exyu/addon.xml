@@ -1,4 +1,4 @@
-<addon id="plugin.video.n1exyu" name="N1 Info" provider-name="zchira" version="0.6">
+<addon id="plugin.video.n1exyu" name="N1 Info" provider-name="zchira" version="0.7">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="script.module.beautifulsoup4" version="4.3.1"/>
