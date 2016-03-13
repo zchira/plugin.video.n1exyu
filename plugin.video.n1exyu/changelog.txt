@@ -1,3 +1,9 @@
+version 0.8 - added shows "Neistrazeno" and "Tri tacke"
+
+version 0.7 - added shows description (visible while in media info mode)
+
+version 0.6 - added shows "Pressing", "Dnevnik (Serbian)" and "Crvena linija"
+
 version 0.3 - added live streams for Serbian, Croatian and Bosnian region 
 
 version 0.2 - initial version. Working live stream 
