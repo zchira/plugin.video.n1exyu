@@ -46,6 +46,8 @@ def INDEX():
     add_show_folder(PRESSING_SHOW)
     add_show_folder(DNEVNIK_19_SHOW)
     add_show_folder(CRVENA_LINIJA_SHOW)
+    add_show_folder(TRI_TACKE)
+    add_show_folder(NEISTRAZENO)
 
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -77,6 +79,11 @@ def FOLDER(folder_name, pagetoken = ''):
         show = DNEVNIK_19_SHOW
     elif folder_name == CRVENA_LINIJA_SHOW.title:
         show = CRVENA_LINIJA_SHOW
+    elif folder_name == TRI_TACKE.title:
+        show = TRI_TACKE
+    elif folder_name == NEISTRAZENO.title:
+        show = NEISTRAZENO
+
 
     if show != None:
         #items = = helper.get_show_data(show.webPage)
@@ -123,7 +130,7 @@ MAIN
 """
 
 mode = args.get('mode', None)
-
+  
 PRESSING_SHOW = ShowInfo()
 PRESSING_SHOW.webPage = 'http://rs.n1info.com/a4557/TV-Emisije/Pressing/Pressing.html'
 PRESSING_SHOW.title = "Pressing"
@@ -144,6 +151,20 @@ CRVENA_LINIJA_SHOW.title = "Crvena Linija"
 CRVENA_LINIJA_SHOW.fanartUrl = 'http://static.rs.n1info.com/Picture/46806/jpeg/Crvena-Linija-mali-poster-tv-emisija.jpg'
 CRVENA_LINIJA_SHOW.iconUrl = iconImage
 CRVENA_LINIJA_SHOW.yt_playlist_id = "PLtkTKfgc4b4WnU64YTYTsbCrTnyYhrJcD"
+
+TRI_TACKE = ShowInfo()
+TRI_TACKE.webPage = "http://rs.n1info.com/a96712/TV-Emisije/Tri-tacke/Tri-tacke.html"
+TRI_TACKE.title = "Tri tacke"
+TRI_TACKE.fanartUrl = "http://static.rs.n1info.com/Picture/43064/jpeg/tri-tacke-poster-za-sajt-700x392.jpg"
+TRI_TACKE.iconUrl = iconImage
+TRI_TACKE.yt_playlist_id = "PLtkTKfgc4b4X-9spsthcBJKxvmryswVdg"
+
+NEISTRAZENO = ShowInfo()
+NEISTRAZENO.webPage = ""
+NEISTRAZENO.title = "Neistrazeno"
+NEISTRAZENO.fanartUrl = "http://static.rs.n1info.com/Picture/36929/jpeg/jajce-tri.jpg"
+NEISTRAZENO.iconUrl = iconImage
+NEISTRAZENO.yt_playlist_id = "PLtkTKfgc4b4VN7IMFxMkfPDIeqcozgNET"
 
 
 

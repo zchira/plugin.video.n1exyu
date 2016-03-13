@@ -1,4 +1,4 @@
-<addon id="plugin.video.n1exyu" name="N1 Info" provider-name="zchira" version="0.7">
+<addon id="plugin.video.n1exyu" name="N1 Info" provider-name="zchira" version="0.8">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="script.module.beautifulsoup4" version="4.3.1"/>
@@ -13,7 +13,7 @@
   <extension point="xbmc.addon.metadata">
     <language>en</language>
     <platform>all</platform>
-    <summary lang="en">Watch the live stream from N1 info in Serbian/Croatian</summary>
+    <summary lang="en">Watch the live stream or various tv shows from N1 info in Serbian/Croatian.</summary>
     <description lang="en">N1 is exYu regional news TV</description>
     <email>zchira@gmail.com</email>
   </extension>
